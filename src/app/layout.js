@@ -20,7 +20,7 @@ export const metadata = {
     icon: "/logo_monomito-menor.png",
   },
 };
-//
+
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
