@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { FaFacebookSquare, FaInstagram, FaYoutube } from "react-icons/fa";
@@ -13,9 +13,7 @@ export const Header = () => {
       <div className={styles.header_link}>
         <div>
           <Link href="/">
-            <h1>
-              Monomito Filmes ssss
-            </h1>
+            <h1>Monomito Filmes</h1>
           </Link>
         </div>
         <div className={styles.open_close}>
@@ -48,7 +46,10 @@ export const Header = () => {
           </Link>
         </li>
         <li className={styles.icons}>
-          <Link href="https://www.instagram.com/monomitofilmes/" target="_blank">
+          <Link
+            href="https://www.instagram.com/monomitofilmes/"
+            target="_blank"
+          >
             <FaInstagram size="1.4em" color="white" />
           </Link>
         </li>
