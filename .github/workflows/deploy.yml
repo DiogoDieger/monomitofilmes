@@ -24,21 +24,21 @@ jobs:
       - name: Build Project
         run: npm run build # Certifique-se de que este script gera a pasta 'out/'
 
-      # 🔹 Lista os arquivos na pasta /www antes da exclusão
+      # 🔹 Lista os arquivos na pasta /www antes da exclusão (ignora erro de certificado)
       - name: List Files Before Deletion
         run: |
           sudo apt-get install -y lftp
-          lftp -e "ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
+          lftp -e "set ssl:verify-certificate no; ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"${{ secrets.FTP_PASSWORD }}" ftp.monomitofilmes.com.br
 
-      # 🔥 Apaga todos os arquivos antigos antes do deploy
+      # 🔥 Apaga todos os arquivos antigos antes do deploy (ignora erro de certificado)
       - name: Clean Remote Directory
         run: |
-          lftp -e "rm -rf /home/monomitofilmes/www/*; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
+          lftp -e "set ssl:verify-certificate no; rm -rf /home/monomitofilmes/www/*; bye" -u monomitofilmes,"${{ secrets.FTP_PASSWORD }}" ftp.monomitofilmes.com.br
 
-      # 🔹 Lista os arquivos na pasta /www depois da exclusão
+      # 🔹 Lista os arquivos na pasta /www depois da exclusão (ignora erro de certificado)
       - name: List Files After Deletion
         run: |
-          lftp -e "ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
+          lftp -e "set ssl:verify-certificate no; ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"${{ secrets.FTP_PASSWORD }}" ftp.monomitofilmes.com.br
 
       # 🚀 Faz upload dos arquivos novos via FTP
       - name: Deploy via FTP
@@ -46,7 +46,7 @@ jobs:
         with:
           server: "ftp.monomitofilmes.com.br"
           username: "monomitofilmes"
-          password: Huehuebr12 # Use Secrets para segurança
+          password: ${{ secrets.FTP_PASSWORD }} # Use Secrets para segurança
           local-dir: "./out/"
           server-dir: "/home/monomitofilmes/www/"
           exclude: |
@@ -56,7 +56,7 @@ jobs:
             **/package-lock.json
           dangerous-clean-slate: true # Limpa a pasta de destino antes do upload
 
-      # 🔹 Lista os arquivos após o deploy para confirmar que tudo subiu
+      # 🔹 Lista os arquivos após o deploy para confirmar que tudo subiu (ignora erro de certificado)
       - name: List Files After Deploy
         run: |
-          lftp -e "ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
+          lftp -e "set ssl:verify-certificate no; ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"${{ secrets.FTP_PASSWORD }}" ftp.monomitofilmes.com.br
