@@ -3,7 +3,7 @@ name: Deploy to KingHost via FTP
 on:
   push:
     branches:
-      - main # Roda o workflow quando há push na branch 'main'
+      - main # O workflow será executado em pushs na branch 'main'
 
 jobs:
   deploy:
@@ -13,12 +13,23 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4 # 🔥 Atualizado para versão correta
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          server: "ftp.monomitofilmes.com.br"
-          username: "monomitofilmes"
-          password: "Huehuebr12"
+          node-version: "20" # Certifique-se de usar a versão do Node.js compatível com seu projeto
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build # Certifique-se de que este script gera a pasta 'out/'
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: "ftp.monomitofilmes.com.br" # Substitua pelo seu host FTP
+          username: "seu_usuario_ftp" # Substitua pelo seu usuário FTP
+          password: ${{ secrets.FTP_PASSWORD }} # Utilize secrets para a senha
           local-dir: "./out/"
           server-dir: "/home/monomitofilmes/www/"
           exclude: |
@@ -26,4 +37,4 @@ jobs:
             **/.DS_Store
             **/node_modules
             **/package-lock.json
-          dangerous-clean-slate: true # ⚠ Apaga tudo na pasta www antes do upload
+          dangerous-clean-slate: true # Limpa a pasta de destino antes do upload
