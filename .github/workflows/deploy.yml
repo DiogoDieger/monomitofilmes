@@ -27,9 +27,9 @@ jobs:
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: "ftp.monomitofilmes.com.br" # Substitua pelo seu host FTP
-          username: "seu_usuario_ftp" # Substitua pelo seu usuário FTP
-          password: ${{ secrets.FTP_PASSWORD }} # Utilize secrets para a senha
+          server: "ftp.monomitofilmes.com.br"
+          username: "monomitofilmes"
+          password: "Huehuebr12"
           local-dir: "./out/"
           server-dir: "/home/monomitofilmes/www/"
           exclude: |
