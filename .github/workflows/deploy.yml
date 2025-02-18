@@ -1,40 +1,29 @@
-name: Deploy to Server
+name: Deploy to KingHost via FTP
 
 on:
   push:
     branches:
-      - main # O workflow roda quando há push na branch 'main'
+      - main # Roda o workflow quando há push na branch 'main'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Testar Conectividade
-        run: ping -c 4 nodejs36f02.kinghost.net # <-- Indentação corrigida
-
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Install SSHPass
-        run: sudo apt-get install -y sshpass
-
-      - name: Deploy via SSH with Password
-        run: |
-          sshpass -p "Huehuebr12" ssh -o StrictHostKeyChecking=no monomitofilmes@nodejs36f02.kinghost.net << EOF
-            echo "🚀 Iniciando Deploy..."
-
-            # Entrar na pasta do projeto e atualizar com git pull
-            cd /home/monomitofilmes/apps_nodejs/monomito-filmes
-            git pull origin main
-            
-            # Apagar arquivos antigos da pasta www
-            echo "🧹 Limpando a pasta www..."
-            rm -rf /home/monomitofilmes/www/*
-            
-            # Mover os arquivos da pasta out para www
-            echo "📂 Movendo arquivos da pasta out para www..."
-            mv /home/monomitofilmes/apps_nodejs/monomito-filmes/out/* /home/monomitofilmes/www/
-
-            echo "✅ Deploy concluído com sucesso!"
-          EOF
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: "ftp.monomitofilmes.com.br"
+          username: "monomitofilmes"
+          password: "Huehuebr12"
+          local-dir: "./out/"
+          server-dir: "/home/monomitofilmes/www/"
+          exclude: |
+            **/.git*
+            **/.DS_Store
+            **/node_modules
+            **/package-lock.json
+          dangerous-clean-slate: true # ⚠ Apaga tudo na pasta www antes do upload
