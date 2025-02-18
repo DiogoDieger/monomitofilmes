@@ -24,12 +24,29 @@ jobs:
       - name: Build Project
         run: npm run build # Certifique-se de que este script gera a pasta 'out/'
 
+      # 🔹 Lista os arquivos na pasta /www antes da exclusão
+      - name: List Files Before Deletion
+        run: |
+          sudo apt-get install -y lftp
+          lftp -e "ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
+
+      # 🔥 Apaga todos os arquivos antigos antes do deploy
+      - name: Clean Remote Directory
+        run: |
+          lftp -e "rm -rf /home/monomitofilmes/www/*; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
+
+      # 🔹 Lista os arquivos na pasta /www depois da exclusão
+      - name: List Files After Deletion
+        run: |
+          lftp -e "ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
+
+      # 🚀 Faz upload dos arquivos novos via FTP
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: "ftp.monomitofilmes.com.br"
           username: "monomitofilmes"
-          password: "Huehuebr12"
+          password: Huehuebr12 # Use Secrets para segurança
           local-dir: "./out/"
           server-dir: "/home/monomitofilmes/www/"
           exclude: |
@@ -38,3 +55,8 @@ jobs:
             **/node_modules
             **/package-lock.json
           dangerous-clean-slate: true # Limpa a pasta de destino antes do upload
+
+      # 🔹 Lista os arquivos após o deploy para confirmar que tudo subiu
+      - name: List Files After Deploy
+        run: |
+          lftp -e "ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
