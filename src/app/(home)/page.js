@@ -12,7 +12,7 @@ export const metadata = {
     icon: "/logo_monomito-menor.png",
   },
 };
-
+//
 const HomePage = () => {
   return (
     <section className="all-content">
