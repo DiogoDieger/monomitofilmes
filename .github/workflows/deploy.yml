@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Testar Conectividade
+      run: ping -c 4 nodejs36f02.kinghost.net
+
       - name: Checkout Repository
         uses: actions/checkout@v3
 
