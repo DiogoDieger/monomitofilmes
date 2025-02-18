@@ -17,7 +17,7 @@ const HomePage = () => {
   return (
     <section className="all-content">
       <main className="content-page">
-        <SectionBanner />
+        {/* <SectionBanner /> */}
         <SectionProjects />
         <SectionAboutMonomito />
         <SectionBrands />
