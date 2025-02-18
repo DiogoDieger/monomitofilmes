@@ -24,18 +24,13 @@ jobs:
       - name: Build Project
         run: npm run build # Certifique-se de que este script gera a pasta 'out/'
 
-      # 🔹 Lista os arquivos na pasta /www antes da exclusão (ignora erro de certificado)
-      - name: List Files Before Deletion
+      # 🔹 Força exclusão de todos os arquivos antes do deploy
+      - name: Force Clean Remote Directory
         run: |
           sudo apt-get install -y lftp
-          lftp -e "set ssl:verify-certificate no; ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
+          lftp -e "set ssl:verify-certificate no; chmod -R 777 /home/monomitofilmes/www/; mrm -rf /home/monomitofilmes/www/*; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
 
-      # 🔥 Apaga todos os arquivos antigos antes do deploy (ignora erro de certificado)
-      - name: Clean Remote Directory
-        run: |
-          lftp -e "set ssl:verify-certificate no; rm -rf /home/monomitofilmes/www/*; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
-
-      # 🔹 Lista os arquivos na pasta /www depois da exclusão (ignora erro de certificado)
+      # 🔹 Lista os arquivos na pasta /www depois da exclusão
       - name: List Files After Deletion
         run: |
           lftp -e "set ssl:verify-certificate no; ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
@@ -56,7 +51,7 @@ jobs:
             **/package-lock.json
           dangerous-clean-slate: true # Limpa a pasta de destino antes do upload
 
-      # 🔹 Lista os arquivos após o deploy para confirmar que tudo subiu (ignora erro de certificado)
+      # 🔹 Lista os arquivos após o deploy para confirmar que tudo subiu corretamente
       - name: List Files After Deploy
         run: |
           lftp -e "set ssl:verify-certificate no; ls /home/monomitofilmes/www/; bye" -u monomitofilmes,"Huehuebr12" ftp.monomitofilmes.com.br
