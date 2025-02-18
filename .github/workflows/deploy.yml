@@ -50,6 +50,8 @@ jobs:
             **/node_modules
             **/package-lock.json
           force: true # Limpa a pasta de destino antes do upload
+          dangerous-clean-slate: true
+          dry-run: false
 
       # 🔹 Lista os arquivos após o deploy para confirmar que tudo subiu corretamente
       - name: List Files After Deploy
