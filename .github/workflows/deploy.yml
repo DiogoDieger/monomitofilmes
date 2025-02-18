@@ -49,7 +49,7 @@ jobs:
             **/.DS_Store
             **/node_modules
             **/package-lock.json
-          dangerous-clean-slate: true # Limpa a pasta de destino antes do upload
+          force: true # Limpa a pasta de destino antes do upload
 
       # 🔹 Lista os arquivos após o deploy para confirmar que tudo subiu corretamente
       - name: List Files After Deploy
